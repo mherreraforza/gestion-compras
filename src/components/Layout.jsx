@@ -21,6 +21,7 @@ export default function Layout({ children, view, setView, views, usuario, signOu
                 <button onClick={() => setView(views.CALENDARIO)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Calendario</button>
                 <button onClick={() => setView(views.GESTION_SOLICITUDES)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Gestión</button>
                 <button onClick={() => setView(views.USUARIOS)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Usuarios</button>
+                <button onClick={() => setView(views.CATALOGOS)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Catálogos</button>
               </>
             )}
             <span className="w-px h-4 bg-border mx-2" />

@@ -6,6 +6,7 @@ import Field from '../Field.jsx'
 export default function NuevaSolicitud({ onDone }) {
   const { usuario } = useAuth()
   const [jefes, setJefes] = useState([])
+  const [centros, setCentros] = useState([])
   const [form, setForm] = useState({
     solicitante_nombre: usuario?.nombre || '',
     descripcion: '',
@@ -25,7 +26,12 @@ export default function NuevaSolicitud({ onDone }) {
         setForm((f) => ({ ...f, jefe_id: lista[0].id }))
       }
     })
+    supabase.from('centros_costo').select('*').then(({ data }) => setCentros(data || []))
   }, [])
+
+  const centroDetectado = centros.find(
+    (c) => c.codigo.toLowerCase() === form.centro_costo.trim().toLowerCase()
+  )
 
   function set(field, value) { setForm((f) => ({ ...f, [field]: value })) }
 
@@ -83,8 +89,20 @@ export default function NuevaSolicitud({ onDone }) {
         </label>
         <div className="grid sm:grid-cols-2 gap-x-4">
           <Field label="Monto estimado" type="number" value={form.monto_estimado} onChange={(v) => set('monto_estimado', v)} />
-          <Field label="Centro de costo" value={form.centro_costo} onChange={(v) => set('centro_costo', v)} />
+          <div>
+            <Field label="Centro de costo" value={form.centro_costo} onChange={(v) => set('centro_costo', v)} list="centros-costo-lista" />
+            {centroDetectado ? (
+              <p className="text-xs text-success -mt-2 mb-3">
+                {centroDetectado.nombre || 'Centro reconocido'} · {centroDetectado.planta} · {centroDetectado.area}
+              </p>
+            ) : form.centro_costo && (
+              <p className="text-xs text-muted -mt-2 mb-3">Código no encontrado en el catálogo (se guardará tal cual).</p>
+            )}
+          </div>
         </div>
+        <datalist id="centros-costo-lista">
+          {centros.map((c) => <option key={c.id} value={c.codigo} />)}
+        </datalist>
         <label className="block text-sm mb-3">
           <span className="text-ink/60">¿Quién autoriza?</span>
           <select

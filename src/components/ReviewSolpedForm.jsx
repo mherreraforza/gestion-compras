@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient.js'
 import Field from './Field.jsx'
 
@@ -8,6 +8,11 @@ export default function ReviewSolpedForm({ initial, archivo, onDone }) {
     partidas: (initial.partidas || []).map((p) => ({ ...p, es_recurrente: false, frecuencia: 'mensual', proxima_fecha: '' })),
   }))
   const [saving, setSaving] = useState(false)
+  const [centros, setCentros] = useState([])
+
+  useEffect(() => {
+    supabase.from('centros_costo').select('*').then(({ data }) => setCentros(data || []))
+  }, [])
 
   function set(field, value) { setForm((f) => ({ ...f, [field]: value })) }
   function setPartida(i, field, value) {
@@ -107,7 +112,13 @@ export default function ReviewSolpedForm({ initial, archivo, onDone }) {
             </div>
             <Field label="Texto breve" value={p.texto_breve} onChange={(v) => setPartida(i, 'texto_breve', v)} />
             <div className="grid sm:grid-cols-2 gap-x-4">
-              <Field label="Centro de costo" value={p.centro_costo} onChange={(v) => setPartida(i, 'centro_costo', v)} />
+              <Field label="Centro de costo" value={p.centro_costo} onChange={(v) => setPartida(i, 'centro_costo', v)} list="centros-costo-lista" />
+              {(() => {
+                const detectado = centros.find((c) => c.codigo.toLowerCase() === (p.centro_costo || '').trim().toLowerCase())
+                return detectado ? (
+                  <p className="text-xs text-success -mt-2 mb-3">{detectado.nombre || 'Centro reconocido'} · {detectado.planta}</p>
+                ) : null
+              })()}
               <Field label="Cuenta mayor" value={p.cta_mayor} onChange={(v) => setPartida(i, 'cta_mayor', v)} />
             </div>
             <label className="flex items-center gap-2 text-sm mt-2">
@@ -135,6 +146,9 @@ export default function ReviewSolpedForm({ initial, archivo, onDone }) {
         ))}
       </div>
       <button onClick={addPartida} className="text-sm text-coral mt-3">+ agregar partida</button>
+      <datalist id="centros-costo-lista">
+        {centros.map((c) => <option key={c.id} value={c.codigo} />)}
+      </datalist>
 
       <div className="flex justify-end gap-3 mt-8">
         <button onClick={onDone} className="px-5 py-2 rounded-full text-ink/60">Cancelar</button>

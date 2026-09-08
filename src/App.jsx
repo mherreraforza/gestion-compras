@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   FilePlus, ClipboardList, CheckSquare, BarChart3, CalendarDays,
-  Settings, FileUp, ShoppingCart, Users,
+  Settings, FileUp, ShoppingCart, Users, Tags,
 } from 'lucide-react'
 import { useAuth } from './AuthContext.jsx'
 import Login from './components/Login.jsx'
@@ -14,6 +14,7 @@ import MisSolicitudes from './components/solicitudes/MisSolicitudes.jsx'
 import PorAutorizar from './components/solicitudes/PorAutorizar.jsx'
 import GestionSolicitudes from './components/solicitudes/GestionSolicitudes.jsx'
 import GestionUsuarios from './components/admin/GestionUsuarios.jsx'
+import Catalogos from './components/admin/Catalogos.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import Calendario from './components/Calendario.jsx'
 import { extractDocument } from './lib/api.js'
@@ -27,6 +28,7 @@ const VIEWS = {
   POR_AUTORIZAR: 'por_autorizar',
   GESTION_SOLICITUDES: 'gestion_solicitudes',
   USUARIOS: 'usuarios',
+  CATALOGOS: 'catalogos',
   CARGA_OC: 'carga_oc',
   CARGA_SOLPED: 'carga_solped',
 }
@@ -152,6 +154,12 @@ export default function App() {
                   description="Da de alta colaboradores y autorizadores."
                   onClick={() => setView(VIEWS.USUARIOS)}
                 />
+                <HomeCard
+                  icon={Tags}
+                  title="Catálogos"
+                  description="Centros de costo y cuentas contables."
+                  onClick={() => setView(VIEWS.CATALOGOS)}
+                />
               </>
             )}
           </div>
@@ -167,6 +175,7 @@ export default function App() {
       {view === VIEWS.POR_AUTORIZAR && <PorAutorizar />}
       {view === VIEWS.GESTION_SOLICITUDES && <GestionSolicitudes />}
       {view === VIEWS.USUARIOS && <GestionUsuarios />}
+      {view === VIEWS.CATALOGOS && <Catalogos />}
 
       {(view === VIEWS.CARGA_OC || view === VIEWS.CARGA_SOLPED) && !extracted && (
         <UploadCard
