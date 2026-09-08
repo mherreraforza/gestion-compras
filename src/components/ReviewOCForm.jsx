@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient.js'
 import Field from './Field.jsx'
 
 export default function ReviewOCForm({ initial, archivo, onDone }) {
   const [form, setForm] = useState(initial)
   const [saving, setSaving] = useState(false)
+  const [cuentas, setCuentas] = useState([])
+
+  useEffect(() => {
+    supabase.from('cuentas_contables').select('*').then(({ data }) => setCuentas(data || []))
+  }, [])
 
   function set(field, value) { setForm((f) => ({ ...f, [field]: value })) }
   function setProv(field, value) { setForm((f) => ({ ...f, proveedor: { ...f.proveedor, [field]: value } })) }
@@ -135,6 +140,18 @@ export default function ReviewOCForm({ initial, archivo, onDone }) {
               <Field label="Precio" type="number" value={p.precio} onChange={(v) => setPartida(i, 'precio', v)} />
             </div>
             <Field label="Descripción" value={p.descripcion} onChange={(v) => setPartida(i, 'descripcion', v)} />
+            <div className="grid sm:grid-cols-2 gap-x-4">
+              <div>
+                <Field label="Cuenta contable" value={p.cuenta_contable} onChange={(v) => setPartida(i, 'cuenta_contable', v)} list="cuentas-lista" />
+                {(() => {
+                  const detectada = cuentas.find((c) => c.cuenta === (p.cuenta_contable || '').trim())
+                  return detectada ? (
+                    <p className="text-xs text-success -mt-2 mb-3">{detectada.concepto} · {detectada.area}</p>
+                  ) : null
+                })()}
+              </div>
+              <Field label="Código artículo" value={p.cod_articulo} onChange={(v) => setPartida(i, 'cod_articulo', v)} />
+            </div>
             <label className="flex items-center gap-2 text-sm mt-1">
               <input type="checkbox" checked={!!p.es_periodo} onChange={(e) => setPartida(i, 'es_periodo', e.target.checked)} />
               Es un periodo recurrente
@@ -149,6 +166,9 @@ export default function ReviewOCForm({ initial, archivo, onDone }) {
         ))}
       </div>
       <button onClick={addPartida} className="text-sm text-coral mt-3">+ agregar partida</button>
+      <datalist id="cuentas-lista">
+        {cuentas.map((c) => <option key={c.id} value={c.cuenta} />)}
+      </datalist>
 
       <div className="flex justify-end gap-3 mt-8">
         <button onClick={onDone} className="px-5 py-2 rounded-full text-ink/60">Cancelar</button>
