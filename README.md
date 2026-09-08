@@ -62,5 +62,25 @@ vercel dev
 - Dashboard de gastos del mes (agrupando `ordenes_compra` + `oc_partidas`, con manejo
   de que hay documentos en USD y otros en MXN — pendiente decidir si se normaliza o
   se muestra separado por moneda).
-- Vista de calendario visual sobre la tabla `recordatorios`.
+- Vista de calendario visual sobre la tabla `recordatorios` + fechas de solicitudes
+  pendientes de autorización.
 - Catálogo/editor de centros de costo y cuentas contables (hoy son texto libre).
+
+## Fase 2: Solicitudes con login y autorización
+
+1. En Supabase, corre `db/schema_fase2_solicitudes.sql` (después de `schema.sql`).
+2. Confirma que el login por correo/contraseña esté activo: Authentication → Providers → Email (viene activado por defecto).
+3. Entra a la app y crea tu propia cuenta desde el botón "Crear cuenta" (elige cualquier rol, lo vamos a corregir en el paso 4).
+4. Vuelve al SQL Editor de Supabase y corre esto para volverte PMO (con tu correo real):
+   ```sql
+   update usuarios set rol = 'pmo' where correo = 'tu-correo@forzasteel.com';
+   ```
+   El rol "pmo" no se puede elegir al registrarse por seguridad — siempre se asigna a mano así.
+5. Pide a cada jefe que cree su propia cuenta eligiendo el rol "Jefe", y a cada colaborador que cree la suya con rol "Colaborador". Tú (PMO) puedes registrar solicitudes en nombre de quien no tenga cuenta, usando el campo de nombre libre.
+
+### Flujo de una solicitud
+`Pendiente de autorización → Autorizada / Rechazada → En gestión (tú generas la SOLPED en SAP) → SOLPED generada → Completada`
+
+- Cualquiera crea una solicitud desde "Nueva solicitud" y elige quién la autoriza.
+- El jefe la ve en "Por autorizar" y decide.
+- Tú ves todo en "Gestión" y vas avanzando el estatus conforme trabajas la compra.
