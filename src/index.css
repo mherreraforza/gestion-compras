@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }

@@ -51,7 +51,7 @@ export default function GestionSolicitudes() {
             onClick={() => setFiltro(f)}
             className={`px-4 py-1.5 rounded-full text-sm ${filtro === f ? 'bg-coral text-white' : 'bg-white text-ink/60'}`}
           >
-            {f === 'activas' ? 'En trámite' : f === 'pendientes' ? 'Pendientes de jefe' : 'Completadas'}
+            {f === 'activas' ? 'En trámite' : f === 'pendientes' ? 'Pendientes de autorizador' : 'Completadas'}
           </button>
         ))}
       </div>
@@ -61,7 +61,7 @@ export default function GestionSolicitudes() {
 
       <div className="space-y-3">
         {solicitudes.map((s) => (
-          <div key={s.id} className="bg-white rounded-xl2 shadow-sm p-5">
+          <div key={s.id} className="bg-surface border border-border rounded-xl2 p-5">
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-medium">#{s.folio} · {s.solicitante_nombre}</h3>
               <EstatusBadge estatus={s.estatus} />

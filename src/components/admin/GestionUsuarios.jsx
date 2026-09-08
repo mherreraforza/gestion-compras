@@ -44,7 +44,7 @@ export default function GestionUsuarios() {
 
   return (
     <div className="max-w-2xl mx-auto grid gap-6 sm:grid-cols-2">
-      <div className="bg-white rounded-xl2 shadow-md p-8">
+      <div className="bg-surface border border-border rounded-xl2 p-8">
         <h2 className="font-semibold text-lg mb-1">Dar de alta un usuario</h2>
         <p className="text-sm text-ink/60 mb-6">Tú decides quién entra al sistema.</p>
         <form onSubmit={handleSubmit}>
@@ -59,7 +59,7 @@ export default function GestionUsuarios() {
               className="mt-1 w-full rounded-lg border border-ink/10 px-3 py-2"
             >
               <option value="colaborador">Colaborador</option>
-              <option value="jefe">Jefe</option>
+              <option value="jefe">Autorizador</option>
               <option value="gestor">Gestor</option>
             </select>
           </label>
@@ -71,7 +71,7 @@ export default function GestionUsuarios() {
         </form>
       </div>
 
-      <div className="bg-white rounded-xl2 shadow-md p-8">
+      <div className="bg-surface border border-border rounded-xl2 p-8">
         <h2 className="font-semibold text-lg mb-4">Usuarios actuales</h2>
         <div className="space-y-2">
           {usuarios.map((u) => (

@@ -26,7 +26,7 @@ export default function MisSolicitudes() {
   return (
     <div className="max-w-2xl mx-auto space-y-3">
       {solicitudes.map((s) => (
-        <div key={s.id} className="bg-white rounded-xl2 shadow-sm p-5">
+        <div key={s.id} className="bg-surface border border-border rounded-xl2 p-5">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-medium">#{s.folio} · {s.descripcion}</h3>
             <EstatusBadge estatus={s.estatus} />

@@ -37,13 +37,13 @@ export default function PorAutorizar() {
   if (loading) return <p className="text-center text-ink/50">Cargando…</p>
 
   if (!solicitudes.length) {
-    return <p className="text-center text-ink/50 mt-10">No tienes solicitudes pendientes por autorizar 🎉</p>
+    return <p className="text-center text-muted text-sm mt-10">No tienes solicitudes pendientes por autorizar.</p>
   }
 
   return (
     <div className="max-w-2xl mx-auto space-y-4">
       {solicitudes.map((s) => (
-        <div key={s.id} className="bg-white rounded-xl2 shadow-md p-6">
+        <div key={s.id} className="bg-surface border border-border rounded-xl2 p-6">
           <h3 className="font-medium mb-1">#{s.folio} · {s.solicitante_nombre}</h3>
           <p className="text-sm mb-1">{s.descripcion}</p>
           {s.justificacion && <p className="text-sm text-ink/60 mb-2">{s.justificacion}</p>}

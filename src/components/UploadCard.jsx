@@ -12,7 +12,7 @@ export default function UploadCard({ tipo, loading, error, onUpload }) {
   }
 
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-xl2 shadow-md p-8 text-center">
+    <div className="max-w-xl mx-auto bg-surface border border-border rounded-xl2 p-8 text-center">
       <h2 className="font-semibold text-lg mb-2">
         {tipo === 'oc' ? 'Sube el PDF de la Orden de Compra' : 'Sube la foto de la SOLPED'}
       </h2>

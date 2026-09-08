@@ -1,31 +1,37 @@
+import { Briefcase, LogOut } from 'lucide-react'
+
 export default function Layout({ children, view, setView, views, usuario, signOut }) {
   return (
-    <div className="min-h-screen bg-blush">
-      <header className="bg-white/70 backdrop-blur sticky top-0 z-10 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <button onClick={() => setView(views.HOME)} className="font-bold text-coral text-lg">
-            ✨ Gestión de Compras
+    <div className="min-h-screen bg-canvas">
+      <header className="bg-surface border-b border-border sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
+          <button onClick={() => setView(views.HOME)} className="flex items-center gap-2 font-semibold text-brand text-[15px] tracking-tight">
+            <Briefcase size={18} strokeWidth={2} />
+            Gestión de Compras
           </button>
-          <nav className="flex items-center gap-2 text-sm">
-            <button onClick={() => setView(views.HOME)} className="px-3 py-1.5 rounded-full hover:bg-blush">Inicio</button>
-            <button onClick={() => setView(views.MIS_SOLICITUDES)} className="px-3 py-1.5 rounded-full hover:bg-blush">Mis solicitudes</button>
+          <nav className="flex items-center gap-1 text-[13px] font-medium text-muted">
+            <button onClick={() => setView(views.HOME)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Inicio</button>
+            <button onClick={() => setView(views.MIS_SOLICITUDES)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Mis solicitudes</button>
             {(usuario?.rol === 'jefe' || usuario?.rol === 'gestor') && (
-              <button onClick={() => setView(views.POR_AUTORIZAR)} className="px-3 py-1.5 rounded-full hover:bg-blush">Por autorizar</button>
+              <button onClick={() => setView(views.POR_AUTORIZAR)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Por autorizar</button>
             )}
             {usuario?.rol === 'gestor' && (
               <>
-                <button onClick={() => setView(views.DASHBOARD)} className="px-3 py-1.5 rounded-full hover:bg-blush">Dashboard</button>
-                <button onClick={() => setView(views.CALENDARIO)} className="px-3 py-1.5 rounded-full hover:bg-blush">Calendario</button>
-                <button onClick={() => setView(views.GESTION_SOLICITUDES)} className="px-3 py-1.5 rounded-full hover:bg-blush">Gestión</button>
-                <button onClick={() => setView(views.USUARIOS)} className="px-3 py-1.5 rounded-full hover:bg-blush">Usuarios</button>
+                <button onClick={() => setView(views.DASHBOARD)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Dashboard</button>
+                <button onClick={() => setView(views.CALENDARIO)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Calendario</button>
+                <button onClick={() => setView(views.GESTION_SOLICITUDES)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Gestión</button>
+                <button onClick={() => setView(views.USUARIOS)} className="px-3 py-1.5 rounded-md hover:bg-canvas hover:text-ink">Usuarios</button>
               </>
             )}
-            <span className="text-ink/40 px-2">{usuario?.nombre}</span>
-            <button onClick={signOut} className="px-3 py-1.5 rounded-full text-ink/50 hover:bg-blush">Salir</button>
+            <span className="w-px h-4 bg-border mx-2" />
+            <span className="text-ink font-medium">{usuario?.nombre}</span>
+            <button onClick={signOut} className="p-1.5 rounded-md hover:bg-canvas text-muted hover:text-ink" title="Salir">
+              <LogOut size={16} />
+            </button>
           </nav>
         </div>
       </header>
-      <main className="max-w-5xl mx-auto px-4 py-8">{children}</main>
+      <main className="max-w-6xl mx-auto px-6 py-10">{children}</main>
     </div>
   )
 }

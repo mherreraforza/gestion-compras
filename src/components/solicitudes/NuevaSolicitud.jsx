@@ -55,9 +55,9 @@ export default function NuevaSolicitud({ onDone }) {
   }
 
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-xl2 shadow-md p-8">
+    <div className="max-w-xl mx-auto bg-surface border border-border rounded-xl2 p-8">
       <h2 className="font-semibold text-lg mb-1">Nueva solicitud</h2>
-      <p className="text-sm text-ink/60 mb-6">Se manda a tu jefe para autorización.</p>
+      <p className="text-sm text-ink/60 mb-6">Se manda a tu autorizador para su visto bueno.</p>
 
       <form onSubmit={handleSubmit}>
         {usuario?.rol === 'gestor' && (

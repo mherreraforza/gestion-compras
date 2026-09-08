@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import {
+  FilePlus, ClipboardList, CheckSquare, BarChart3, CalendarDays,
+  Settings, FileUp, ShoppingCart, Users,
+} from 'lucide-react'
 import { useAuth } from './AuthContext.jsx'
 import Login from './components/Login.jsx'
 import Layout from './components/Layout.jsx'
@@ -27,6 +31,21 @@ const VIEWS = {
   CARGA_SOLPED: 'carga_solped',
 }
 
+function HomeCard({ icon: Icon, title, description, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="group bg-surface border border-border rounded-xl2 p-6 text-left hover:border-brand/40 hover:shadow-sm transition-all"
+    >
+      <div className="w-9 h-9 rounded-md bg-canvas flex items-center justify-center mb-4 group-hover:bg-brand/5">
+        <Icon size={18} className="text-brand" strokeWidth={1.75} />
+      </div>
+      <h2 className="font-semibold text-[15px] text-ink mb-1">{title}</h2>
+      <p className="text-sm text-muted leading-snug">{description}</p>
+    </button>
+  )
+}
+
 function emptyOC() {
   return {
     numero_documento: '', fecha_documento: '', proveedor: { nombre: '', numero_proveedor: '', rfc: '' },
@@ -46,9 +65,9 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  if (authLoading) return <p className="text-center mt-20 text-ink/50">Cargando…</p>
+  if (authLoading) return <p className="text-center mt-20 text-muted text-sm">Cargando…</p>
   if (!session) return <Login />
-  if (!usuario) return <p className="text-center mt-20 text-ink/50">Preparando tu cuenta…</p>
+  if (!usuario) return <p className="text-center mt-20 text-muted text-sm">Preparando tu cuenta…</p>
 
   async function handleUpload(file, tipo) {
     if (tipo === 'solped') {
@@ -71,58 +90,71 @@ export default function App() {
   return (
     <Layout view={view} setView={setView} views={VIEWS} usuario={usuario} signOut={signOut}>
       {view === VIEWS.HOME && (
-        <div className="grid gap-6 sm:grid-cols-2 max-w-3xl mx-auto mt-10">
-          <button onClick={() => setView(VIEWS.NUEVA_SOLICITUD)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-            <p className="text-2xl mb-2">🙋</p>
-            <h2 className="font-semibold text-lg mb-1">Nueva solicitud</h2>
-            <p className="text-sm text-ink/60">Pide algo y mándalo a autorizar.</p>
-          </button>
-          <button onClick={() => setView(VIEWS.MIS_SOLICITUDES)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-            <p className="text-2xl mb-2">📋</p>
-            <h2 className="font-semibold text-lg mb-1">Mis solicitudes</h2>
-            <p className="text-sm text-ink/60">Ve el estatus de lo que has pedido.</p>
-          </button>
-          {(usuario.rol === 'jefe' || usuario.rol === 'gestor') && (
-            <button onClick={() => setView(VIEWS.POR_AUTORIZAR)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-              <p className="text-2xl mb-2">✅</p>
-              <h2 className="font-semibold text-lg mb-1">Por autorizar</h2>
-              <p className="text-sm text-ink/60">Solicitudes esperando tu visto bueno.</p>
-            </button>
-          )}
-          {usuario.rol === 'gestor' && (
-            <>
-              <button onClick={() => setView(VIEWS.DASHBOARD)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-                <p className="text-2xl mb-2">📊</p>
-                <h2 className="font-semibold text-lg mb-1">Dashboard</h2>
-                <p className="text-sm text-ink/60">Gasto del mes y solicitudes activas.</p>
-              </button>
-              <button onClick={() => setView(VIEWS.CALENDARIO)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-                <p className="text-2xl mb-2">📅</p>
-                <h2 className="font-semibold text-lg mb-1">Calendario</h2>
-                <p className="text-sm text-ink/60">Periodos y recordatorios recurrentes.</p>
-              </button>
-              <button onClick={() => setView(VIEWS.GESTION_SOLICITUDES)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-                <p className="text-2xl mb-2">⚙️</p>
-                <h2 className="font-semibold text-lg mb-1">Gestión de solicitudes</h2>
-                <p className="text-sm text-ink/60">Todo lo autorizado que te toca tramitar.</p>
-              </button>
-              <button onClick={() => setView(VIEWS.CARGA_OC)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-                <p className="text-2xl mb-2">📄</p>
-                <h2 className="font-semibold text-lg mb-1">Cargar Orden de Compra</h2>
-                <p className="text-sm text-ink/60">Sube el PDF, se lee solo.</p>
-              </button>
-              <button onClick={() => setView(VIEWS.CARGA_SOLPED)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-                <p className="text-2xl mb-2">🛒</p>
-                <h2 className="font-semibold text-lg mb-1">Cargar Solicitud de Pedido</h2>
-                <p className="text-sm text-ink/60">Sube la foto de la SOLPED de SAP.</p>
-              </button>
-              <button onClick={() => setView(VIEWS.USUARIOS)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
-                <p className="text-2xl mb-2">👥</p>
-                <h2 className="font-semibold text-lg mb-1">Usuarios</h2>
-                <p className="text-sm text-ink/60">Da de alta colaboradores y jefes.</p>
-              </button>
-            </>
-          )}
+        <div>
+          <h1 className="text-xl font-semibold text-ink mb-1">Panel principal</h1>
+          <p className="text-sm text-muted mb-8">Gestión de compras — {usuario.nombre}</p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <HomeCard
+              icon={FilePlus}
+              title="Nueva solicitud"
+              description="Pide algo y mándalo a autorizar."
+              onClick={() => setView(VIEWS.NUEVA_SOLICITUD)}
+            />
+            <HomeCard
+              icon={ClipboardList}
+              title="Mis solicitudes"
+              description="Ve el estatus de lo que has pedido."
+              onClick={() => setView(VIEWS.MIS_SOLICITUDES)}
+            />
+            {(usuario.rol === 'jefe' || usuario.rol === 'gestor') && (
+              <HomeCard
+                icon={CheckSquare}
+                title="Por autorizar"
+                description="Solicitudes esperando tu visto bueno."
+                onClick={() => setView(VIEWS.POR_AUTORIZAR)}
+              />
+            )}
+            {usuario.rol === 'gestor' && (
+              <>
+                <HomeCard
+                  icon={BarChart3}
+                  title="Dashboard"
+                  description="Gasto del mes y solicitudes activas."
+                  onClick={() => setView(VIEWS.DASHBOARD)}
+                />
+                <HomeCard
+                  icon={CalendarDays}
+                  title="Calendario"
+                  description="Periodos y recordatorios recurrentes."
+                  onClick={() => setView(VIEWS.CALENDARIO)}
+                />
+                <HomeCard
+                  icon={Settings}
+                  title="Gestión de solicitudes"
+                  description="Todo lo autorizado que te toca tramitar."
+                  onClick={() => setView(VIEWS.GESTION_SOLICITUDES)}
+                />
+                <HomeCard
+                  icon={FileUp}
+                  title="Cargar Orden de Compra"
+                  description="Sube el PDF, se lee automáticamente."
+                  onClick={() => setView(VIEWS.CARGA_OC)}
+                />
+                <HomeCard
+                  icon={ShoppingCart}
+                  title="Cargar Solicitud de Pedido"
+                  description="Sube la foto de la SOLPED de SAP."
+                  onClick={() => setView(VIEWS.CARGA_SOLPED)}
+                />
+                <HomeCard
+                  icon={Users}
+                  title="Usuarios"
+                  description="Da de alta colaboradores y autorizadores."
+                  onClick={() => setView(VIEWS.USUARIOS)}
+                />
+              </>
+            )}
+          </div>
         </div>
       )}
 

@@ -34,7 +34,7 @@ export default function Calendario() {
 
   return (
     <div className="max-w-3xl mx-auto grid gap-6 sm:grid-cols-2">
-      <div className="bg-white rounded-xl2 shadow-md p-6">
+      <div className="bg-surface border border-border rounded-xl2 p-6">
         <div className="flex justify-between items-center mb-4">
           <button onClick={() => setCursor(new Date(anio, mes - 1, 1))} className="px-2 text-ink/50 hover:text-coral">←</button>
           <h3 className="font-semibold capitalize">
@@ -61,7 +61,7 @@ export default function Calendario() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl2 shadow-md p-6">
+      <div className="bg-surface border border-border rounded-xl2 p-6">
         <h3 className="font-semibold mb-4">Próximos recordatorios</h3>
         {proximos.length === 0 && <p className="text-sm text-ink/50">Nada próximo por ahora.</p>}
         <div className="space-y-3">

@@ -4,14 +4,31 @@ export default {
   theme: {
     extend: {
       colors: {
-        blush: '#FDEDF3',
-        coral: '#FF6F91',
-        mint: '#B8F2E6',
-        lilac: '#C9B6E4',
-        ink: '#3D3D3D',
+        // Paleta ejecutiva: fondo neutro, azul marino como color de marca
+        canvas: '#F4F5F7',
+        surface: '#FFFFFF',
+        border: '#E2E5EA',
+        ink: '#1F2937',
+        muted: '#6B7280',
+        brand: {
+          DEFAULT: '#14213D',
+          light: '#1F2E52',
+          accent: '#2F6FED',
+        },
+        success: '#15803D',
+        warning: '#B45309',
+        danger: '#B91C1C',
+        // Se mantienen para no romper clases existentes en los componentes
+        blush: '#F4F5F7',
+        coral: '#14213D',
+        mint: '#E7F3EA',
+        lilac: '#E8EBF5',
       },
       borderRadius: {
-        xl2: '1.25rem',
+        xl2: '0.5rem',
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },
