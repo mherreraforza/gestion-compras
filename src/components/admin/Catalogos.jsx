@@ -32,6 +32,8 @@ function CentrosCosto() {
   const [items, setItems] = useState([])
   const [nuevo, setNuevo] = useState({ codigo: '', nombre: '', planta: 'Salinas Victoria', area: 'planta' })
   const [buscar, setBuscar] = useState('')
+  const [filtroPlanta, setFiltroPlanta] = useState('todas')
+  const [filtroArea, setFiltroArea] = useState('todas')
 
   useEffect(() => { cargar() }, [])
 
@@ -63,18 +65,34 @@ function CentrosCosto() {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [field]: value } : it)))
   }
 
-  const filtrados = items.filter((it) =>
-    (it.codigo + ' ' + (it.nombre || '')).toLowerCase().includes(buscar.toLowerCase())
-  )
+  const filtrados = items.filter((it) => {
+    const coincideTexto = (it.codigo + ' ' + (it.nombre || '')).toLowerCase().includes(buscar.toLowerCase())
+    const coincidePlanta = filtroPlanta === 'todas' || it.planta === filtroPlanta
+    const coincideArea = filtroArea === 'todas' || it.area === filtroArea
+    return coincideTexto && coincidePlanta && coincideArea
+  })
 
   return (
     <div className="bg-surface border border-border rounded-xl2 p-6">
-      <input
-        placeholder="Buscar código o nombre..."
-        value={buscar}
-        onChange={(e) => setBuscar(e.target.value)}
-        className="w-full rounded-md border border-border px-3 py-2 text-sm mb-4"
-      />
+      <div className="grid sm:grid-cols-3 gap-2 mb-4">
+        <input
+          placeholder="Buscar código o nombre..."
+          value={buscar}
+          onChange={(e) => setBuscar(e.target.value)}
+          className="rounded-md border border-border px-3 py-2 text-sm"
+        />
+        <select value={filtroPlanta} onChange={(e) => setFiltroPlanta(e.target.value)} className="rounded-md border border-border px-3 py-2 text-sm">
+          <option value="todas">Todas las plantas</option>
+          <option value="Salinas Victoria">Salinas Victoria</option>
+          <option value="Guadalupe Doxmon">Guadalupe Doxmon</option>
+        </select>
+        <select value={filtroArea} onChange={(e) => setFiltroArea(e.target.value)} className="rounded-md border border-border px-3 py-2 text-sm">
+          <option value="todas">Todas las áreas</option>
+          {AREAS_CC.map((a) => <option key={a} value={a}>{a}</option>)}
+        </select>
+      </div>
+
+      <p className="text-xs text-muted mb-2">{filtrados.length} de {items.length} centros</p>
 
       <div className="grid grid-cols-[1.2fr_2fr_1.3fr_1fr_auto] gap-2 text-xs text-muted font-medium mb-2 px-1">
         <span>Código</span><span>Nombre</span><span>Planta</span><span>Área</span><span></span>
@@ -117,6 +135,7 @@ function CuentasContables() {
   const [items, setItems] = useState([])
   const [nuevo, setNuevo] = useState({ concepto: '', area: 'general', cuenta: '' })
   const [buscar, setBuscar] = useState('')
+  const [filtroArea, setFiltroArea] = useState('todas')
 
   useEffect(() => { cargar() }, [])
 
@@ -148,16 +167,28 @@ function CuentasContables() {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [field]: value } : it)))
   }
 
-  const filtrados = items.filter((it) => it.concepto.toLowerCase().includes(buscar.toLowerCase()))
+  const filtrados = items.filter((it) => {
+    const coincideTexto = it.concepto.toLowerCase().includes(buscar.toLowerCase())
+    const coincideArea = filtroArea === 'todas' || it.area === filtroArea
+    return coincideTexto && coincideArea
+  })
 
   return (
     <div className="bg-surface border border-border rounded-xl2 p-6">
-      <input
-        placeholder="Buscar concepto..."
-        value={buscar}
-        onChange={(e) => setBuscar(e.target.value)}
-        className="w-full rounded-md border border-border px-3 py-2 text-sm mb-4"
-      />
+      <div className="grid sm:grid-cols-2 gap-2 mb-4">
+        <input
+          placeholder="Buscar concepto..."
+          value={buscar}
+          onChange={(e) => setBuscar(e.target.value)}
+          className="rounded-md border border-border px-3 py-2 text-sm"
+        />
+        <select value={filtroArea} onChange={(e) => setFiltroArea(e.target.value)} className="rounded-md border border-border px-3 py-2 text-sm">
+          <option value="todas">Todas las áreas</option>
+          {AREAS_CTA.map((a) => <option key={a} value={a}>{a}</option>)}
+        </select>
+      </div>
+
+      <p className="text-xs text-muted mb-2">{filtrados.length} de {items.length} cuentas</p>
 
       <div className="grid grid-cols-[2.5fr_1.2fr_1.3fr_auto] gap-2 text-xs text-muted font-medium mb-2 px-1">
         <span>Concepto</span><span>Área</span><span>Cuenta</span><span></span>
