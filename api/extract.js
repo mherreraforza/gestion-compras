@@ -80,11 +80,13 @@ function parseOC(rawText) {
     const descripcion = block.split('\n')[0].trim()
     const periodoMatch = block.match(/Per[ií]odo\s+(\d+)\s+En\s+(\d{2}\.\d{2}\.\d{4})\s+Hasta\s+(\d{2}\.\d{2}\.\d{4})/i)
     const cuentaMatch = block.match(/\b(\d{10})\b/)
+    const centroMatch = block.match(/\b((?:SPL|PGF)-[A-Z0-9-]+)\b/i)
 
     partidas.push({
       numero_partida,
       descripcion,
       cuenta_contable: cuentaMatch ? cuentaMatch[1] : '',
+      centro_costo: centroMatch ? centroMatch[1].toUpperCase() : '',
       cod_articulo: valuesMatch ? valuesMatch[1] : '',
       cantidad: valuesMatch ? num(valuesMatch[2]) : 1,
       um: valuesMatch ? valuesMatch[3] : '',

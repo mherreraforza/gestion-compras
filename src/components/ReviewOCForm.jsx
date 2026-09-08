@@ -6,9 +6,11 @@ export default function ReviewOCForm({ initial, archivo, onDone }) {
   const [form, setForm] = useState(initial)
   const [saving, setSaving] = useState(false)
   const [cuentas, setCuentas] = useState([])
+  const [centros, setCentros] = useState([])
 
   useEffect(() => {
     supabase.from('cuentas_contables').select('*').then(({ data }) => setCuentas(data || []))
+    supabase.from('centros_costo').select('*').then(({ data }) => setCentros(data || []))
   }, [])
 
   function set(field, value) { setForm((f) => ({ ...f, [field]: value })) }
@@ -23,7 +25,7 @@ export default function ReviewOCForm({ initial, archivo, onDone }) {
   function addPartida() {
     setForm((f) => ({
       ...f,
-      partidas: [...f.partidas, { numero_partida: '', descripcion: '', cantidad: 1, um: 'SER', precio: 0, total: 0, es_periodo: false }],
+      partidas: [...f.partidas, { numero_partida: '', descripcion: '', cantidad: 1, um: 'SER', precio: 0, total: 0, es_periodo: false, cuenta_contable: '', centro_costo: '', cod_articulo: '' }],
     }))
   }
   function removePartida(i) {
@@ -152,6 +154,15 @@ export default function ReviewOCForm({ initial, archivo, onDone }) {
               </div>
               <Field label="Código artículo" value={p.cod_articulo} onChange={(v) => setPartida(i, 'cod_articulo', v)} />
             </div>
+            <div>
+              <Field label="Centro de costo" value={p.centro_costo} onChange={(v) => setPartida(i, 'centro_costo', v)} list="centros-lista" />
+              {(() => {
+                const detectado = centros.find((c) => c.codigo.toLowerCase() === (p.centro_costo || '').trim().toLowerCase())
+                return detectado ? (
+                  <p className="text-xs text-success -mt-2 mb-3">{detectado.nombre || 'Centro reconocido'} · {detectado.planta}</p>
+                ) : null
+              })()}
+            </div>
             <label className="flex items-center gap-2 text-sm mt-1">
               <input type="checkbox" checked={!!p.es_periodo} onChange={(e) => setPartida(i, 'es_periodo', e.target.checked)} />
               Es un periodo recurrente
@@ -168,6 +179,9 @@ export default function ReviewOCForm({ initial, archivo, onDone }) {
       <button onClick={addPartida} className="text-sm text-coral mt-3">+ agregar partida</button>
       <datalist id="cuentas-lista">
         {cuentas.map((c) => <option key={c.id} value={c.cuenta} />)}
+      </datalist>
+      <datalist id="centros-lista">
+        {centros.map((c) => <option key={c.id} value={c.codigo} />)}
       </datalist>
 
       <div className="flex justify-end gap-3 mt-8">
