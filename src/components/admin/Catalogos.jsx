@@ -168,7 +168,8 @@ function CuentasContables() {
   }
 
   const filtrados = items.filter((it) => {
-    const coincideTexto = it.concepto.toLowerCase().includes(buscar.toLowerCase())
+    const texto = buscar.toLowerCase()
+    const coincideTexto = it.concepto.toLowerCase().includes(texto) || it.cuenta.toLowerCase().includes(texto)
     const coincideArea = filtroArea === 'todas' || it.area === filtroArea
     return coincideTexto && coincideArea
   })
@@ -177,7 +178,7 @@ function CuentasContables() {
     <div className="bg-surface border border-border rounded-xl2 p-6">
       <div className="grid sm:grid-cols-2 gap-2 mb-4">
         <input
-          placeholder="Buscar concepto..."
+          placeholder="Buscar concepto o número de cuenta..."
           value={buscar}
           onChange={(e) => setBuscar(e.target.value)}
           className="rounded-md border border-border px-3 py-2 text-sm"
