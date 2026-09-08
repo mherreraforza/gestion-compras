@@ -30,6 +30,11 @@ export default function App() {
   const [error, setError] = useState(null)
 
   async function handleUpload(file, tipo) {
+    if (tipo === 'solped') {
+      // Es una foto: se captura 100% a mano, no hay lectura automática.
+      setExtracted({ tipo, data: emptySolped(), archivo: file })
+      return
+    }
     setLoading(true)
     setError(null)
     try {
@@ -37,7 +42,7 @@ export default function App() {
       setExtracted({ tipo, data, archivo: file })
     } catch (e) {
       setError('No se pudo leer el documento automáticamente. Captúralo a mano abajo.')
-      setExtracted({ tipo, data: tipo === 'oc' ? emptyOC() : emptySolped(), archivo: file })
+      setExtracted({ tipo, data: emptyOC(), archivo: file })
     } finally {
       setLoading(false)
     }

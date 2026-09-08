@@ -20,8 +20,6 @@ cp .env.example .env
 Rellena:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
-- `ANTHROPIC_API_KEY` (solo se usa localmente si pruebas `vercel dev`; en producción se
-  configura directo en Vercel, ver paso 4)
 
 ## 3. Correr en local
 
@@ -44,20 +42,20 @@ vercel dev
 3. En Settings → Environment Variables agrega:
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_ANON_KEY`
-   - `ANTHROPIC_API_KEY` (sin prefijo VITE_, así nunca llega al navegador)
 4. Deploy.
 
 ## Cómo funciona la lectura de documentos
 
-- La OC es un PDF con plantilla fija → se manda tal cual a Claude (como documento),
-  que regresa un JSON con cabecera + partidas, y detecta si hay partidas con patrón
-  de "Período N En... Hasta..." para marcarlas como recurrentes automáticamente.
-- La SOLPED es una foto de la pantalla de SAP → se manda como imagen, la lectura es
-  menos confiable (es una tabla comprimida), por eso el formulario de revisión siempre
-  se muestra antes de guardar y ahí se marca manualmente si una partida es recurrente
-  (con frecuencia y próxima fecha).
-- En ambos casos, si la extracción automática falla, el formulario se abre vacío para
-  captura 100% manual — nunca se bloquea la carga.
+- La OC es un PDF con plantilla fija de SAP → se lee su texto con la librería
+  `pdf-parse` y se extraen los campos con reglas de texto fijas (sin IA, sin costo,
+  instantáneo). Detecta si hay partidas con patrón de "Período N En... Hasta..."
+  y las marca como recurrentes automáticamente.
+- La SOLPED es una foto de la pantalla de SAP → como es una imagen (no texto
+  seleccionable), no se puede leer con reglas de texto. Se captura 100% a mano en
+  el formulario; la foto solo queda guardada como respaldo/adjunto.
+- Si la lectura de la OC falla en algún campo (por variaciones menores en el PDF),
+  el formulario de revisión siempre se muestra antes de guardar, así que se puede
+  corregir a mano — nunca se bloquea la carga.
 
 ## Pendiente para siguientes fases
 
