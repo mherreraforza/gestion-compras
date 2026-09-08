@@ -10,10 +10,14 @@ import MisSolicitudes from './components/solicitudes/MisSolicitudes.jsx'
 import PorAutorizar from './components/solicitudes/PorAutorizar.jsx'
 import GestionSolicitudes from './components/solicitudes/GestionSolicitudes.jsx'
 import GestionUsuarios from './components/admin/GestionUsuarios.jsx'
+import Dashboard from './components/Dashboard.jsx'
+import Calendario from './components/Calendario.jsx'
 import { extractDocument } from './lib/api.js'
 
 const VIEWS = {
   HOME: 'home',
+  DASHBOARD: 'dashboard',
+  CALENDARIO: 'calendario',
   NUEVA_SOLICITUD: 'nueva_solicitud',
   MIS_SOLICITUDES: 'mis_solicitudes',
   POR_AUTORIZAR: 'por_autorizar',
@@ -78,15 +82,25 @@ export default function App() {
             <h2 className="font-semibold text-lg mb-1">Mis solicitudes</h2>
             <p className="text-sm text-ink/60">Ve el estatus de lo que has pedido.</p>
           </button>
-          {(usuario.rol === 'jefe' || usuario.rol === 'pmo') && (
+          {(usuario.rol === 'jefe' || usuario.rol === 'gestor') && (
             <button onClick={() => setView(VIEWS.POR_AUTORIZAR)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
               <p className="text-2xl mb-2">✅</p>
               <h2 className="font-semibold text-lg mb-1">Por autorizar</h2>
               <p className="text-sm text-ink/60">Solicitudes esperando tu visto bueno.</p>
             </button>
           )}
-          {usuario.rol === 'pmo' && (
+          {usuario.rol === 'gestor' && (
             <>
+              <button onClick={() => setView(VIEWS.DASHBOARD)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
+                <p className="text-2xl mb-2">📊</p>
+                <h2 className="font-semibold text-lg mb-1">Dashboard</h2>
+                <p className="text-sm text-ink/60">Gasto del mes y solicitudes activas.</p>
+              </button>
+              <button onClick={() => setView(VIEWS.CALENDARIO)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
+                <p className="text-2xl mb-2">📅</p>
+                <h2 className="font-semibold text-lg mb-1">Calendario</h2>
+                <p className="text-sm text-ink/60">Periodos y recordatorios recurrentes.</p>
+              </button>
               <button onClick={() => setView(VIEWS.GESTION_SOLICITUDES)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
                 <p className="text-2xl mb-2">⚙️</p>
                 <h2 className="font-semibold text-lg mb-1">Gestión de solicitudes</h2>
@@ -112,6 +126,8 @@ export default function App() {
         </div>
       )}
 
+      {view === VIEWS.DASHBOARD && <Dashboard />}
+      {view === VIEWS.CALENDARIO && <Calendario />}
       {view === VIEWS.NUEVA_SOLICITUD && (
         <NuevaSolicitud onDone={() => setView(VIEWS.MIS_SOLICITUDES)} />
       )}

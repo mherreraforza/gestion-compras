@@ -9,14 +9,16 @@ export default function Layout({ children, view, setView, views, usuario, signOu
           <nav className="flex items-center gap-2 text-sm">
             <button onClick={() => setView(views.HOME)} className="px-3 py-1.5 rounded-full hover:bg-blush">Inicio</button>
             <button onClick={() => setView(views.MIS_SOLICITUDES)} className="px-3 py-1.5 rounded-full hover:bg-blush">Mis solicitudes</button>
-            {(usuario?.rol === 'jefe' || usuario?.rol === 'pmo') && (
+            {(usuario?.rol === 'jefe' || usuario?.rol === 'gestor') && (
               <button onClick={() => setView(views.POR_AUTORIZAR)} className="px-3 py-1.5 rounded-full hover:bg-blush">Por autorizar</button>
             )}
-            {usuario?.rol === 'pmo' && (
-              <button onClick={() => setView(views.GESTION_SOLICITUDES)} className="px-3 py-1.5 rounded-full hover:bg-blush">Gestión</button>
-            )}
-            {usuario?.rol === 'pmo' && (
-              <button onClick={() => setView(views.USUARIOS)} className="px-3 py-1.5 rounded-full hover:bg-blush">Usuarios</button>
+            {usuario?.rol === 'gestor' && (
+              <>
+                <button onClick={() => setView(views.DASHBOARD)} className="px-3 py-1.5 rounded-full hover:bg-blush">Dashboard</button>
+                <button onClick={() => setView(views.CALENDARIO)} className="px-3 py-1.5 rounded-full hover:bg-blush">Calendario</button>
+                <button onClick={() => setView(views.GESTION_SOLICITUDES)} className="px-3 py-1.5 rounded-full hover:bg-blush">Gestión</button>
+                <button onClick={() => setView(views.USUARIOS)} className="px-3 py-1.5 rounded-full hover:bg-blush">Usuarios</button>
+              </>
             )}
             <span className="text-ink/40 px-2">{usuario?.nombre}</span>
             <button onClick={signOut} className="px-3 py-1.5 rounded-full text-ink/50 hover:bg-blush">Salir</button>

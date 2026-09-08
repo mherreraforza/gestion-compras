@@ -60,7 +60,7 @@ export default function GestionUsuarios() {
             >
               <option value="colaborador">Colaborador</option>
               <option value="jefe">Jefe</option>
-              <option value="pmo">PMO</option>
+              <option value="gestor">Gestor</option>
             </select>
           </label>
           {error && <p className="text-xs text-red-500 mb-3">{error}</p>}

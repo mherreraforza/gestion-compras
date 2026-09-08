@@ -44,7 +44,7 @@ export default function Login() {
         </form>
 
         <p className="text-xs text-ink/40 mt-6 text-center">
-          ¿No tienes cuenta? Pídele acceso a tu PMO — aquí no hay registro abierto.
+          ¿No tienes cuenta? Pídele acceso a tu gestor — aquí no hay registro abierto.
         </p>
       </div>
     </div>

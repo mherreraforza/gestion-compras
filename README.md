@@ -84,9 +84,9 @@ vercel dev
    - Ve a SQL Editor y corre (con tus datos reales):
      ```sql
      insert into usuarios (id, nombre, correo, rol)
-     values ('EL-UUID-QUE-COPIASTE', 'Tu nombre', 'tu-correo@forzasteel.com', 'pmo');
+     values ('EL-UUID-QUE-COPIASTE', 'Tu nombre', 'tu-correo@forzasteel.com', 'gestor');
      ```
-6. Entra a la app con ese correo y contraseña — ya eres PMO.
+6. Entra a la app con ese correo y contraseña — ya eres Gestor.
 7. Desde el botón **"Usuarios"** (solo tú lo ves), da de alta a tu jefe (rol Jefe) y a cada
    colaborador (rol Colaborador), con un correo y una contraseña temporal que tú les compartes.
    Nadie más puede crear su propia cuenta.

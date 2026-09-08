@@ -60,7 +60,7 @@ export default function NuevaSolicitud({ onDone }) {
       <p className="text-sm text-ink/60 mb-6">Se manda a tu jefe para autorización.</p>
 
       <form onSubmit={handleSubmit}>
-        {usuario?.rol === 'pmo' && (
+        {usuario?.rol === 'gestor' && (
           <Field label="Nombre del solicitante" value={form.solicitante_nombre} onChange={(v) => set('solicitante_nombre', v)} />
         )}
         <label className="block text-sm mb-3">

@@ -8,7 +8,7 @@ create table usuarios (
   id uuid primary key references auth.users(id) on delete cascade,
   nombre text not null,
   correo text,
-  rol text not null default 'colaborador' check (rol in ('colaborador','jefe','pmo')),
+  rol text not null default 'colaborador' check (rol in ('colaborador','jefe','gestor')),
   created_at timestamptz default now()
 );
 
@@ -22,7 +22,7 @@ create table solicitudes (
   id uuid primary key default gen_random_uuid(),
   folio serial,
   solicitante_id uuid references usuarios(id),
-  solicitante_nombre text,       -- para cuando el PMO la registra sin que el empleado tenga cuenta
+  solicitante_nombre text,       -- para cuando el Gestor la registra sin que el empleado tenga cuenta
   descripcion text not null,
   justificacion text,
   monto_estimado numeric(14,2),
@@ -53,10 +53,10 @@ create policy "jefe ve lo que le toca" on solicitudes
 create policy "jefe actualiza lo que le toca" on solicitudes
   for update using (jefe_id = auth.uid());
 
--- El PMO (tu) ve y gestiona absolutamente todo
-create policy "pmo administra todo" on solicitudes
+-- El Gestor (tu) ve y gestiona absolutamente todo
+create policy "gestor administra todo" on solicitudes
   for all using (
-    exists (select 1 from usuarios u where u.id = auth.uid() and u.rol = 'pmo')
+    exists (select 1 from usuarios u where u.id = auth.uid() and u.rol = 'gestor')
   );
 
 create index idx_solicitudes_estatus on solicitudes(estatus);

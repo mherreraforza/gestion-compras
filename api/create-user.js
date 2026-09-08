@@ -1,5 +1,5 @@
 // Vercel Serverless Function
-// Solo un usuario con rol 'pmo' puede crear cuentas nuevas.
+// Solo un usuario con rol 'gestor' puede crear cuentas nuevas.
 // Usa la Secret key de Supabase (SUPABASE_SERVICE_ROLE_KEY), que NUNCA se manda al navegador.
 
 import { createClient } from '@supabase/supabase-js'
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
     .eq('id', userData.user.id)
     .single()
 
-  if (!perfil || perfil.rol !== 'pmo') {
+  if (!perfil || perfil.rol !== 'gestor') {
     res.status(403).json({ error: 'not_authorized' })
     return
   }
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     res.status(400).json({ error: 'missing_fields' })
     return
   }
-  if (!['colaborador', 'jefe', 'pmo'].includes(rol)) {
+  if (!['colaborador', 'jefe', 'gestor'].includes(rol)) {
     res.status(400).json({ error: 'invalid_role' })
     return
   }
