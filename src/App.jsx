@@ -9,6 +9,7 @@ import NuevaSolicitud from './components/solicitudes/NuevaSolicitud.jsx'
 import MisSolicitudes from './components/solicitudes/MisSolicitudes.jsx'
 import PorAutorizar from './components/solicitudes/PorAutorizar.jsx'
 import GestionSolicitudes from './components/solicitudes/GestionSolicitudes.jsx'
+import GestionUsuarios from './components/admin/GestionUsuarios.jsx'
 import { extractDocument } from './lib/api.js'
 
 const VIEWS = {
@@ -17,6 +18,7 @@ const VIEWS = {
   MIS_SOLICITUDES: 'mis_solicitudes',
   POR_AUTORIZAR: 'por_autorizar',
   GESTION_SOLICITUDES: 'gestion_solicitudes',
+  USUARIOS: 'usuarios',
   CARGA_OC: 'carga_oc',
   CARGA_SOLPED: 'carga_solped',
 }
@@ -100,6 +102,11 @@ export default function App() {
                 <h2 className="font-semibold text-lg mb-1">Cargar Solicitud de Pedido</h2>
                 <p className="text-sm text-ink/60">Sube la foto de la SOLPED de SAP.</p>
               </button>
+              <button onClick={() => setView(VIEWS.USUARIOS)} className="rounded-xl2 bg-white shadow-md p-8 text-left hover:shadow-lg transition hover:-translate-y-1">
+                <p className="text-2xl mb-2">👥</p>
+                <h2 className="font-semibold text-lg mb-1">Usuarios</h2>
+                <p className="text-sm text-ink/60">Da de alta colaboradores y jefes.</p>
+              </button>
             </>
           )}
         </div>
@@ -111,6 +118,7 @@ export default function App() {
       {view === VIEWS.MIS_SOLICITUDES && <MisSolicitudes />}
       {view === VIEWS.POR_AUTORIZAR && <PorAutorizar />}
       {view === VIEWS.GESTION_SOLICITUDES && <GestionSolicitudes />}
+      {view === VIEWS.USUARIOS && <GestionUsuarios />}
 
       {(view === VIEWS.CARGA_OC || view === VIEWS.CARGA_SOLPED) && !extracted && (
         <UploadCard

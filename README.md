@@ -66,21 +66,34 @@ vercel dev
   pendientes de autorización.
 - Catálogo/editor de centros de costo y cuentas contables (hoy son texto libre).
 
-## Fase 2: Solicitudes con login y autorización
+## Fase 2: Solicitudes con login y autorización (usuarios cerrados, sin registro público)
 
 1. En Supabase, corre `db/schema_fase2_solicitudes.sql` (después de `schema.sql`).
-2. Confirma que el login por correo/contraseña esté activo: Authentication → Providers → Email (viene activado por defecto).
-3. Entra a la app y crea tu propia cuenta desde el botón "Crear cuenta" (elige cualquier rol, lo vamos a corregir en el paso 4).
-4. Vuelve al SQL Editor de Supabase y corre esto para volverte PMO (con tu correo real):
-   ```sql
-   update usuarios set rol = 'pmo' where correo = 'tu-correo@forzasteel.com';
-   ```
-   El rol "pmo" no se puede elegir al registrarse por seguridad — siempre se asigna a mano así.
-5. Pide a cada jefe que cree su propia cuenta eligiendo el rol "Jefe", y a cada colaborador que cree la suya con rol "Colaborador". Tú (PMO) puedes registrar solicitudes en nombre de quien no tenga cuenta, usando el campo de nombre libre.
+2. **Apaga el registro público**: Authentication → Sign In / Providers → Email → desactiva
+   "Allow new users to sign up" (o el interruptor equivalente, el nombre varía según la
+   versión de Supabase). Esto es importante: aunque la app ya no muestra un botón de
+   "crear cuenta", sin este paso alguien podría crear una cuenta llamando directo a la API.
+3. Consigue tu **Secret key** de Supabase: Settings → API Keys → pestaña "Publishable and
+   secret API keys" → copia la que empieza `sb_secret_...` (la misma sección donde sacaste
+   la publishable, pero la de abajo).
+4. En Vercel, agrega una variable de entorno nueva: `SUPABASE_SERVICE_ROLE_KEY` con ese
+   valor. **Nunca** le pongas el prefijo VITE_ — esta debe quedarse solo en el servidor.
+5. **Crea tu propia cuenta (la primera, a mano, solo esta vez):**
+   - Supabase → Authentication → Users → **Add user** → **Create new user** → pon tu correo y una contraseña
+   - Copia el UUID que le asignó (aparece en la lista de usuarios)
+   - Ve a SQL Editor y corre (con tus datos reales):
+     ```sql
+     insert into usuarios (id, nombre, correo, rol)
+     values ('EL-UUID-QUE-COPIASTE', 'Tu nombre', 'tu-correo@forzasteel.com', 'pmo');
+     ```
+6. Entra a la app con ese correo y contraseña — ya eres PMO.
+7. Desde el botón **"Usuarios"** (solo tú lo ves), da de alta a tu jefe (rol Jefe) y a cada
+   colaborador (rol Colaborador), con un correo y una contraseña temporal que tú les compartes.
+   Nadie más puede crear su propia cuenta.
 
 ### Flujo de una solicitud
 `Pendiente de autorización → Autorizada / Rechazada → En gestión (tú generas la SOLPED en SAP) → SOLPED generada → Completada`
 
-- Cualquiera crea una solicitud desde "Nueva solicitud" y elige quién la autoriza.
+- Cualquiera con cuenta crea una solicitud desde "Nueva solicitud" y elige quién la autoriza.
 - El jefe la ve en "Por autorizar" y decide.
 - Tú ves todo en "Gestión" y vas avanzando el estatus conforme trabajas la compra.

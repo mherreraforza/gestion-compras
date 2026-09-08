@@ -15,6 +15,9 @@ export default function Layout({ children, view, setView, views, usuario, signOu
             {usuario?.rol === 'pmo' && (
               <button onClick={() => setView(views.GESTION_SOLICITUDES)} className="px-3 py-1.5 rounded-full hover:bg-blush">Gestión</button>
             )}
+            {usuario?.rol === 'pmo' && (
+              <button onClick={() => setView(views.USUARIOS)} className="px-3 py-1.5 rounded-full hover:bg-blush">Usuarios</button>
+            )}
             <span className="text-ink/40 px-2">{usuario?.nombre}</span>
             <button onClick={signOut} className="px-3 py-1.5 rounded-full text-ink/50 hover:bg-blush">Salir</button>
           </nav>
