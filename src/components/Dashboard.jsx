@@ -21,24 +21,14 @@ export default function Dashboard() {
 
   if (loading) return <p className="text-center text-ink/50">Cargando…</p>
 
-  const hoy = new Date()
-  const mesActual = hoy.getMonth()
-  const anioActual = hoy.getFullYear()
-
-  const ocsDelMes = ocs.filter((o) => {
-    if (!o.fecha_documento) return false
-    const f = new Date(o.fecha_documento)
-    return f.getMonth() === mesActual && f.getFullYear() === anioActual
-  })
-
   const gastoPorMoneda = {}
-  ocsDelMes.forEach((o) => {
+  ocs.forEach((o) => {
     const m = o.moneda || 'MXN'
     gastoPorMoneda[m] = (gastoPorMoneda[m] || 0) + Number(o.total || 0)
   })
 
   const gastoPorProveedor = {}
-  ocsDelMes.forEach((o) => {
+  ocs.forEach((o) => {
     const nombre = o.proveedores?.nombre || 'Sin proveedor'
     gastoPorProveedor[nombre] = (gastoPorProveedor[nombre] || 0) + Number(o.total || 0)
   })
@@ -51,12 +41,12 @@ export default function Dashboard() {
       <div className="grid sm:grid-cols-3 gap-4">
         {Object.entries(gastoPorMoneda).length === 0 && (
           <div className="bg-surface border border-border rounded-xl2 p-6 sm:col-span-3 text-center text-ink/50">
-            Todavía no hay OC cargadas este mes.
+            Todavía no hay OC cargadas.
           </div>
         )}
         {Object.entries(gastoPorMoneda).map(([moneda, total]) => (
           <div key={moneda} className="bg-surface border border-border rounded-xl2 p-6">
-            <p className="text-xs text-ink/50 mb-1">Gasto del mes ({moneda})</p>
+            <p className="text-xs text-ink/50 mb-1">Gasto acumulado ({moneda})</p>
             <p className="text-2xl font-bold text-coral">
               ${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </p>
@@ -70,10 +60,14 @@ export default function Dashboard() {
           <p className="text-xs text-ink/50 mb-1">En gestión</p>
           <p className="text-2xl font-bold text-purple-600">{contarEstatus('en_gestion')}</p>
         </div>
+        <div className="bg-surface border border-border rounded-xl2 p-6">
+          <p className="text-xs text-ink/50 mb-1">Órdenes de compra cargadas</p>
+          <p className="text-2xl font-bold text-ink">{ocs.length}</p>
+        </div>
       </div>
 
       <div className="bg-surface border border-border rounded-xl2 p-6">
-        <h3 className="font-semibold mb-4">Top proveedores este mes</h3>
+        <h3 className="font-semibold mb-4">Top proveedores (histórico)</h3>
         {topProveedores.length === 0 && <p className="text-sm text-ink/50">Sin datos todavía.</p>}
         <div className="space-y-2">
           {topProveedores.map(([nombre, total]) => (
